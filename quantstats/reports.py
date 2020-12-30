@@ -20,6 +20,7 @@
 
 import pandas as _pd
 import numpy as _np
+import os
 from datetime import (
     datetime as _dt, timedelta as _td
 )
@@ -208,7 +209,7 @@ def html(returns, benchmark=None, rf=0.,
 
 
 def full(returns, benchmark=None, rf=0., grayscale=False,
-         figsize=(8, 5), display=True, compounded=True):
+         figsize=(8, 5), display=True, compounded=True,show=True,savepath=None):
 
     dd = _stats.to_drawdown_series(returns)
     dd_info = _stats.drawdown_details(dd).sort_values(
@@ -246,7 +247,7 @@ def full(returns, benchmark=None, rf=0., grayscale=False,
         print('[Strategy Visualization]\nvia Matplotlib')
 
     plots(returns=returns, benchmark=benchmark,
-          grayscale=grayscale, figsize=figsize, mode='full')
+          grayscale=grayscale, figsize=figsize, mode='full',show=show, compounded=compounded,savepath=savepath)
 
 
 def basic(returns, benchmark=None, rf=0., grayscale=False,
@@ -477,79 +478,79 @@ def metrics(returns, benchmark=None, rf=0., display=True,
 
 
 def plots(returns, benchmark=None, grayscale=False,
-          figsize=(8, 5), mode='basic', compounded=True):
+          figsize=(8, 5), mode='basic',show=True, compounded=True,savepath=None):
 
     if mode.lower() != 'full':
         _plots.snapshot(returns, grayscale=grayscale,
                         figsize=(figsize[0], figsize[0]),
-                        show=True, mode=("comp" if compounded else "sum"))
+                        show=show, mode=("comp" if compounded else "sum"),savefig=os.path.join(savepath,"snapshot.png"))
 
         _plots.monthly_heatmap(returns, grayscale=grayscale,
                                figsize=(figsize[0], figsize[0]*.5),
-                               show=True, ylabel=False,
-                               compounded=compounded)
+                               show=show, ylabel=False,
+                               compounded=compounded,savefig=os.path.join(savepath,"monthly_heatmap.png"))
 
         return
 
     _plots.returns(returns, benchmark, grayscale=grayscale,
                    figsize=(figsize[0], figsize[0]*.6),
-                   show=True, ylabel=False)
+                   show=show, ylabel=False,savefig=os.path.join(savepath,"returns.png"))
 
     _plots.log_returns(returns, benchmark, grayscale=grayscale,
                        figsize=(figsize[0], figsize[0]*.5),
-                       show=True, ylabel=False)
+                       show=show, ylabel=False,savefig=os.path.join(savepath,"log_returns.png"))
 
     if benchmark is not None:
         _plots.returns(returns, benchmark, match_volatility=True,
                        grayscale=grayscale,
                        figsize=(figsize[0], figsize[0]*.5),
-                       show=True, ylabel=False)
+                       show=show, ylabel=False,savefig=os.path.join(savepath,"benchmark_returns.png"))
 
     _plots.yearly_returns(returns, benchmark,
                           grayscale=grayscale,
                           figsize=(figsize[0], figsize[0]*.5),
-                          show=True, ylabel=False)
+                          show=show, ylabel=False,savefig=os.path.join(savepath,"yearly_returns.png"))
 
     _plots.histogram(returns, grayscale=grayscale,
                      figsize=(figsize[0], figsize[0]*.5),
-                     show=True, ylabel=False)
+                     show=show, ylabel=False,savefig=os.path.join(savepath,"histogram.png"))
 
     _plots.daily_returns(returns, grayscale=grayscale,
                          figsize=(figsize[0], figsize[0]*.3),
-                         show=True, ylabel=False)
+                         show=show, ylabel=False,savefig=os.path.join(savepath,"daily_returns.png"))
 
     if benchmark is not None:
         _plots.rolling_beta(returns, benchmark, grayscale=grayscale,
                             figsize=(figsize[0], figsize[0]*.3),
-                            show=True, ylabel=False)
+                            show=show, ylabel=False,savefig=os.path.join(savepath,"beta.png"))
 
     _plots.rolling_volatility(
         returns, benchmark, grayscale=grayscale,
-        figsize=(figsize[0], figsize[0]*.3), show=True, ylabel=False)
+        figsize=(figsize[0], figsize[0]*.3), show=show, ylabel=False,savefig=os.path.join(savepath,"rolliing_volatility.png"))
 
     _plots.rolling_sharpe(returns, grayscale=grayscale,
                           figsize=(figsize[0], figsize[0]*.3),
-                          show=True, ylabel=False)
+                          show=show, ylabel=False,savefig=os.path.join(savepath,"rolling_sharpe.png"))
 
     _plots.rolling_sortino(returns, grayscale=grayscale,
                            figsize=(figsize[0], figsize[0]*.3),
-                           show=True, ylabel=False)
+                           show=show, ylabel=False,savefig=os.path.join(savepath,"rolling_sortino.png"))
 
     _plots.drawdowns_periods(returns, grayscale=grayscale,
                              figsize=(figsize[0], figsize[0]*.5),
-                             show=True, ylabel=False)
+                             show=show, ylabel=False,savefig=os.path.join(savepath,"dd_periods.png"))
 
     _plots.drawdown(returns, grayscale=grayscale,
                     figsize=(figsize[0], figsize[0]*.4),
-                    show=True, ylabel=False)
+                    show=show, ylabel=False,savefig=os.path.join(savepath,"dd.png"))
 
     _plots.monthly_heatmap(returns, grayscale=grayscale,
                            figsize=(figsize[0], figsize[0]*.5),
-                           show=True, ylabel=False)
+                           show=show, ylabel=False,savefig=os.path.join(savepath,"monthly_heatmap.png"))
 
     _plots.distribution(returns, grayscale=grayscale,
                         figsize=(figsize[0], figsize[0]*.5),
-                        show=True, ylabel=False)
+                        show=show, ylabel=False,savefig=os.path.join(savepath,"distribution.png"))
 
 
 def _calc_dd(df, display=True):
