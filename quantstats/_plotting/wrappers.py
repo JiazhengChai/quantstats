@@ -158,7 +158,7 @@ def snapshot(returns, grayscale=False, figsize=(10, 8),
     if show:
         _plt.show(block=False)
 
-    #_plt.close()
+    _plt.close()
 
     if not show:
         return fig
@@ -627,7 +627,7 @@ def monthly_heatmap(returns, annot_size=10, figsize=(10, 5),
     if show:
         _plt.show(block=False)
 
-    #_plt.close()
+    _plt.close()
 
     if not show:
         return fig
